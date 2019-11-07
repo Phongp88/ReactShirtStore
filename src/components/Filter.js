@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-
-
-function Filter({count, sort, handleChangeSort, size, handleChangeSize}) {
+import {connect} from 'react-redux'
+import {filterProducts, sortProducts} from '../actions/productActions'
+function Filter({count, sort, handleChangeSort, size, handleChangeSize, filterProducts, products, sortProducts, filteredProducts}) {
   return (
     <div className="row">
         <div className="col-md-4">
-            {count} Products found
+            {filteredProducts.length} Products found
         </div>
         <div className="col-md-4">
             <label>
                 Order by
-                <select className='form-control' value={sort} onChange={handleChangeSort}>
+                <select className='form-control' value={sort} onChange={(e) => sortProducts(filteredProducts, e.target.value)}>
                     <option value="">Select</option>
                     <option value="lowestprice">lowest to highest</option>
                     <option value="highestprice">highest to lowest</option>
@@ -20,7 +20,7 @@ function Filter({count, sort, handleChangeSort, size, handleChangeSize}) {
         <div className="col-md-4">
         <label>
                 Filter size
-                <select className='form-control' value={size} onChange={handleChangeSize}>
+                <select className='form-control' value={size} onChange={(e) => filterProducts(products, e.target.value)}>
                     <option value="">ALL</option>
                     <option value="X">XS</option>
                     <option value="S">S</option>
@@ -35,4 +35,14 @@ function Filter({count, sort, handleChangeSort, size, handleChangeSize}) {
   );
 }
 
-export default Filter;
+const mapDispatchToProps = dispatch => ({
+    sortProducts: (filteredProducts, sort) => dispatch(sortProducts(filteredProducts, sort)),
+    filterProducts: (products, size) => dispatch(filterProducts(products, size))
+})
+const mapStateToProps = state => ({
+    products: state.products.items,
+    filteredProducts: state.products.filteredItems,
+    size: state.products.size,
+    sort: state.products.sort
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
