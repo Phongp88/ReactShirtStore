@@ -42,6 +42,6 @@
     "ignore-styles": "^5.0.1",
     "jasmine": "^3.5.0",
     "jasmine-enzyme": "^7.1.2",
-    "jsdom": "^15.2.0"
+    "jsdom": "^16.5.0"
   }
 }
